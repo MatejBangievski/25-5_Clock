@@ -1,6 +1,15 @@
 # ClockApplication
 
+This is a task from freeCodeCamp known as [25 + 5 Clock](https://www.freecodecamp.org/learn/front-end-development-libraries/front-end-development-libraries-projects/build-a-25--5-clock)
+
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.0.6.
+
+## Docker
+
+```bash
+docker build -t clock-app .
+docker run -p 8080:80 clock-app
+```
 
 ## Development server
 
