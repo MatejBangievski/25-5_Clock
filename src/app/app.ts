@@ -17,55 +17,14 @@ import {
   styleUrl: './app.css',
 })
 export class App {
-  // Ili site private ili niedno
-
-  // ---- State (single source of truth) ----
   breakLength = signal(DEFAULT_BREAK_LENGTH);
   sessionLength = signal(DEFAULT_SESSION_LENGTH);
   timerLabel = signal<'Break' | 'Session'>('Session');
   timeLeft = signal(DEFAULT_SESSION_LENGTH * 60);
   isRunning = signal(false);
 
-  // True once the user has clicked Start at least once since the last reset.
-  // Needed so timeLeft can "preview" sessionLength changes before the
-  // first start (User Story 18), but stop doing so once a countdown
-  // has actually begun.
-  private hasStarted = signal(false);
-
-  private intervalId: ReturnType<typeof setInterval> | null = null;
+  private intervalId: number | null = null;
   private beepAudio = viewChild.required<ElementRef<HTMLAudioElement>>('beepAudio');
-
-  constructor() {
-    // Keep the displayed time in sync with sessionLength ONLY before
-    // the timer has ever been started. Once started, timeLeft becomes
-    // an independent countdown value.
-
-    //dali treba effect da imame?
-    effect(() => {
-      const length = this.sessionLength();
-      if (!this.hasStarted()) {
-        this.timeLeft.set(length * 60);
-      }
-    });
-  }
-
-  // ---- The one generic function driving all 4 stepper buttons ----
-  adjustLength(type: 'Break' | 'Session', isIncrement: boolean): void {
-    if (this.isRunning()) return;
-
-    const target = type === 'Break' ? this.breakLength : this.sessionLength;
-    const delta = isIncrement ? 1 : -1;
-
-    target.update((current) => {
-      const next = current + delta;
-      return next >= MIN_CLOCK_LENGTH && next <= MAX_CLOCK_LENGTH ? next : current;
-    });
-
-    console.log(type, this.timerLabel());
-    if (type === this.timerLabel()) {
-      this.timeLeft.set(target() * 60);
-    }
-  }
 
   onStartStop(): void {
     this.isRunning() ? this.pauseTimer() : this.startTimer();
@@ -77,26 +36,9 @@ export class App {
     this.intervalId = setInterval(() => this.tick(), TICK_INTERVAL_MS);
   }
 
-  private unlockAudio(): void {
-    const audio = this.beepAudio().nativeElement;
-    const originalVolume = audio.volume;
-    audio.volume = 0;
-
-    audio
-      .play()
-      .then(() => {
-        audio.pause();
-        audio.currentTime = 0;
-        audio.volume = originalVolume;
-      })
-      .catch(() => {
-        audio.volume = originalVolume;
-      });
-  }
-
   private pauseTimer(): void {
     this.isRunning.set(false);
-    if (this.intervalId !== null) {
+    if (this.intervalId) {
       clearInterval(this.intervalId);
       this.intervalId = null;
     }
@@ -122,14 +64,42 @@ export class App {
     }
   }
 
+  adjustLength(type: 'Break' | 'Session', isIncrement: boolean): void {
+    if (this.isRunning()) return;
+
+    const target = type === 'Break' ? this.breakLength : this.sessionLength;
+    const delta = isIncrement ? 1 : -1;
+
+    target.update((current) => {
+      const next = current + delta;
+      return next >= MIN_CLOCK_LENGTH && next <= MAX_CLOCK_LENGTH ? next : current;
+    });
+
+    if (type === this.timerLabel()) {
+      this.timeLeft.set(target() * 60);
+    }
+  }
+
   onReset(): void {
     this.pauseTimer();
-    this.hasStarted.set(false);
     this.breakLength.set(DEFAULT_BREAK_LENGTH);
     this.sessionLength.set(DEFAULT_SESSION_LENGTH);
     this.timerLabel.set('Session');
     this.timeLeft.set(DEFAULT_SESSION_LENGTH * 60);
     this.resetBeep();
+  }
+
+  // For Safari web browser
+  private unlockAudio(): void {
+    const audio = this.beepAudio().nativeElement;
+    const originalVolume = audio.volume;
+    audio.volume = 0;
+
+    audio.play().then(() => {
+        audio.pause();
+        audio.currentTime = 0;
+        audio.volume = originalVolume;
+      });
   }
 
   private playBeep(): void {
@@ -140,6 +110,7 @@ export class App {
     });
   }
 
+  // To stop the audio being played if the user clicks the reset button
   private resetBeep(): void {
     const audio = this.beepAudio().nativeElement;
     audio.pause();
