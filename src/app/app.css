@@ -1,0 +1,46 @@
+:host {
+  display: block;
+}
+
+.clock-app {
+  min-height: 100dvh;
+  display: grid;
+  grid-template-rows: 1fr auto 1fr;
+  align-items: center;
+  justify-items: center;
+  gap: 1rem;
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+}
+
+.top-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 2.5rem);
+  align-self: end;
+  padding-bottom: 1rem;
+}
+
+app-clock-controls {
+  align-self: start;
+  padding-top: 1rem;
+}
+
+.clock-app h1 {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.settings {
+  display: flex;
+  gap: clamp(2rem, 8vw, 5rem);
+}
+
+audio {
+  display: none;
+}

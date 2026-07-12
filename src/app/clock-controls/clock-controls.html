@@ -1,0 +1,9 @@
+<div class="clock-controls">
+  <button type="button" id="start_stop" (click)="startStop.emit()">
+    {{ isRunning() ? 'Pause' : 'Start' }}
+  </button>
+
+  <button type="button" id="reset" (click)="reset.emit()">
+    Reset
+  </button>
+</div>

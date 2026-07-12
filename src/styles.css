@@ -1,1 +1,38 @@
 /* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  color-scheme: dark;
+
+  --bg: #17151b;
+  --surface: #1e1c23;
+  --border: #322f3b;
+
+  --text-primary: #f2f1f5;
+  --text-secondary: #8f8ca0;
+  --text-tertiary: #625f6e;
+
+  --color-idle: #8a8792;
+  --color-session: #6c8ef5;
+  --color-break: #52c9a0;
+
+  --font-display: 'JetBrains Mono', ui-monospace, monospace;
+  --font-body: 'Sora', system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}

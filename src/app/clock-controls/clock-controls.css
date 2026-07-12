@@ -1,0 +1,51 @@
+:host {
+  display: block;
+}
+
+.clock-controls {
+  display: flex;
+  gap: 1rem;
+}
+
+.clock-controls button {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 0.85rem 2rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: transform 0.15s ease, filter 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.clock-controls button:active {
+  transform: translateY(0);
+}
+
+.clock-controls button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+#start_stop {
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: var(--bg);
+}
+
+#start_stop:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.1);
+}
+
+#reset {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+}
+
+#reset:hover {
+  border-color: var(--text-secondary);
+  color: var(--text-primary);
+  transform: translateY(-1px);
+}

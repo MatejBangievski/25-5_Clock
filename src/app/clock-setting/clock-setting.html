@@ -1,0 +1,23 @@
+<div class="clock-setting">
+  <div [id]="labelId()">{{ label() }}</div>
+
+  <div class="stepper">
+    <button
+      type="button"
+      [id]="decrementId()"
+      [disabled]="disabled()"
+      (click)="decrement.emit()">
+      −
+    </button>
+
+    <div [id]="lengthId()">{{ length() }}</div>
+
+    <button
+      type="button"
+      [id]="incrementId()"
+      [disabled]="disabled()"
+      (click)="increment.emit()">
+      +
+    </button>
+  </div>
+</div>
